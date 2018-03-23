@@ -2,18 +2,11 @@
 ;;;№10. Определите функцию, осуществляющую удаление указанного количества по-	;
 ;;;следних элементов исходного списка.						;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun delete-end(list)                      
-  (cond	((null (cdr list)) nil)                        
-		(t ( cons (car list) (delete-end (cdr list)) ))
-  )
-)
-(defun delete-last-n(list n)
- (cond 	((> n 1) (delete-last-n (delete-end list) (1- n) ))
-		((= n 1) (delete-end list))
-		(t list)
- )
-)
-
+(DEFUN DELETE-END (LIST)
+  (COND ((NULL (CDR LIST)) NIL) (T (CONS (CAR LIST) (DELETE-END (CDR LIST))))))
+  
+(DEFUN DELETE-END (LIST)
+  (COND ((NULL (CDR LIST)) NIL) (T (CONS (CAR LIST) (DELETE-END (CDR LIST))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Тест-кейсы:					;
@@ -34,17 +27,12 @@
 ;;;с начала списка, во второй — оставшиеся элементы.				;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun separate-after-n (input-list n)
-	(if input-list
-		(if (zerop n)
-			(cons nil (cons input-list nil))
-   ((lambda (elem result)
-     (cons
-      (cons elem (car result))
-      (cdr result)))
-    (car input-list)
-    (separate-after-n (cdr input-list) (1- n)))))
-)
+(DEFUN SEPARATE-AFTER-N (INPUT-LIST N)
+  (IF INPUT-LIST
+      (IF (ZEROP N)
+          (CONS NIL (CONS INPUT-LIST NIL))
+          ((LAMBDA (ELEM RESULT) (CONS (CONS ELEM (CAR RESULT)) (CDR RESULT)))
+           (CAR INPUT-LIST) (SEPARATE-AFTER-N (CDR INPUT-LIST) (1- N))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Тест-кейсы:					;
@@ -62,39 +50,40 @@
 ;;;№14. Определите функцию, осуществляющую перестановку двух элементов списка	;
 ;;;с заданными номерами.							;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun get-range-start-end (input-list st end) 
-  (cond ((zerop end) nil)
-        ((and (= st 1) (> end 0)) (cons (car input-list) (get-range-start-end (cdr input-list) 1 (1- end))))
-        (t (get-range-start-end (cdr input-list) (1- st) end))))
+(DEFUN GET-RANGE-START-END (INPUT-LIST ST END)
+  (COND ((ZEROP END) NIL)
+        ((AND (= ST 1) (> END 0))
+         (CONS (CAR INPUT-LIST)
+               (GET-RANGE-START-END (CDR INPUT-LIST) 1 (1- END))))
+        (T (GET-RANGE-START-END (CDR INPUT-LIST) (1- ST) END))))
  
-(defun swap (input-list n1 n2)
-  (cond ((= n1 n2) input-list)
-        ((> n1 n2) (swap input-list n2 n1))
-        (t 
-            (append (get-range-start-end input-list 1 (- n1 1))
-					(list (car (get-range-start-end input-list n2 (- (length input-list) n2 -1))))
-					(cdr (get-range-start-end input-list n1 (- n2 n1)))
-					(list (car (get-range-start-end input-list n1 (- n2 n1))))
-					(cdr (get-range-start-end input-list n2 (- (length input-list) n2 -1)))))))
-
-(swap `(1 2 3 4 5) 2 4)		; (1 4 3 2 5)
-(swap `(1 2 3 4 5) 1 2)		; (2 1 3 4 5)
-(swap `(1 2 3 4 5) 3 1)		; (3 2 1 4 5)
+(DEFUN SWAP (INPUT-LIST N1 N2)
+  (COND ((= N1 N2) INPUT-LIST) ((> N1 N2) (SWAP INPUT-LIST N2 N1))
+        (T
+         (APPEND (GET-RANGE-START-END INPUT-LIST 1 (- N1 1))
+                 (LIST
+                  (CAR
+                   (GET-RANGE-START-END INPUT-LIST N2
+                    (- (LENGTH INPUT-LIST) N2 -1))))
+                 (CDR (GET-RANGE-START-END INPUT-LIST N1 (- N2 N1)))
+                 (LIST (CAR (GET-RANGE-START-END INPUT-LIST N1 (- N2 N1))))
+                 (CDR
+                  (GET-RANGE-START-END INPUT-LIST N2
+                   (- (LENGTH INPUT-LIST) N2 -1)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Тест-кейсы:					;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(swap `(1 2 3 4 5) 2 4)		; (1 4 3 2 5)
+(swap `(1 2 3 4 5) 1 2)		; (2 1 3 4 5)
+(swap `(1 2 3 4 5) 3 1)		; (3 2 1 4 5)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;№18. Определите предикат, проверяющий, является ли аргумент одноуровневым	;
 ;;;списком.									;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun flatlistp(input-list)
-	(cond 	((null (car input-list)) t)
-			((not (atom (car input-list))) nil)
-			(t (flatlistp (cdr input-list)))
-	)
-)
+(DEFUN FLATLISTP (INPUT-LIST)
+  (COND ((NULL (CAR INPUT-LIST)) T) ((NOT (ATOM (CAR INPUT-LIST))) NIL)
+        (T (FLATLISTP (CDR INPUT-LIST)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Тест-кейсы:					;
@@ -108,18 +97,13 @@
 ;;;№22. Определите функцию, которая обращает список (а b с) и разбивает его на	;
 ;;;уровни (((с) b) а).								;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun nest-and-reverse (input-list)
-(cond 	((null input-list) nil)
-		(t 
-		((lambda (elem result)
-			(cond ((null result) (list elem))
-			(t (cons 
-				(cons (car result) (cdr result)) (list elem)))))
-			(car input-list)
-			(nest-and-reverse (cdr input-list)))
-		)
-	)
-)
+(DEFUN NEST-AND-REVERSE (INPUT-LIST)
+  (COND ((NULL INPUT-LIST) NIL)
+        (T
+         ((LAMBDA (ELEM RESULT)
+            (COND ((NULL RESULT) (LIST ELEM))
+                  (T (CONS (CONS (CAR RESULT) (CDR RESULT)) (LIST ELEM)))))
+          (CAR INPUT-LIST) (NEST-AND-REVERSE (CDR INPUT-LIST))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Тест-кейсы:					;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -131,20 +115,43 @@
 ;;;№26. Определите функцию, разбивающую список (a b с d...) на пары ((а b) (с	;
 ;;;d)...).									;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(DEFUN PAIR (INPUT-LIST)
+  (COND ((NULL INPUT-LIST) NIL)
+        ((NULL (CDR INPUT-LIST)) (LIST (CAR INPUT-LIST)))
+        (T
+         (CONS (LIST (CAR INPUT-LIST) (CADR INPUT-LIST))
+               (PAIR (CDDR INPUT-LIST))))))
+			
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Тест-кейсы:					;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(pair `(1 2 3 4))	;((1 2) (3 4))
+(pair `(1 2 3))		;((1 2) 3)
+(pair `(1 2 3 4 5))	;((1 2) (3 4) 5)
+(pair `())			;NIL
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;№27. Определите функцию, которая, чередуя элементы списков (a b...) и 	;
 ;;;(1 2...), образует новый список (a 1 b 2 ...).				;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(DEFUN MERGE-ELEMENTS (INPUT-LIST1 INPUT-LIST2)
+  (COND ((AND (NULL INPUT-LIST1) (NULL INPUT-LIST2)) NIL)
+        (T
+         (COND
+          ((NULL INPUT-LIST1)
+           (CONS (CAR INPUT-LIST2) (MERGE-ELEMENTS NIL (CDR INPUT-LIST2))))
+          ((NULL INPUT-LIST2)
+           (CONS (CAR INPUT-LIST1) (MERGE-ELEMENTS (CDR INPUT-LIST1) NIL)))
+          (T
+           (CONS (CAR INPUT-LIST1)
+                 (CONS (CAR INPUT-LIST2)
+                       (MERGE-ELEMENTS (CDR INPUT-LIST1)
+                                       (CDR INPUT-LIST2)))))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Тест-кейсы:					;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(merge-elements `(1 2 3) `(a b c))			;(1 A 2 B 3 C)
+(merge-elements `(1 2 3 4 5 6) `(a b c))	;(1 A 2 B 3 C 4 5)
+(merge-elements `(1 2 3) `(a b c d e f))	;(1 A 2 B 3 C D E)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;№29. Определите функцию, вычисляющую глубину списка (самой глубокой ветви)	;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
