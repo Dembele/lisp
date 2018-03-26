@@ -167,20 +167,50 @@
 ;;;дикат (СЕСТРЫ-БРАТЬЯ x1 x2), который истинен в случае, если x1 и x2 — сест-	;
 ;;;ры или братья, родные или с одним общим родителем.				;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(DEFUN GET-PARENTS (PERSON)
+  (LIST (LIST `(MOTHER) (GET PERSON `MOTHER))
+        (LIST `(FATHER) (GET PERSON `FATHER))))
+
+(DEFUN SET-PARENTS (PERSON MOTHER FATHER)
+  (SETF (GET PERSON `MOTHER) MOTHER)
+  (SETF (GET PERSON `FATHER) FATHER)
+  (GET-PARENTS PERSON))
+
+(DEFUN ARE-SIBLINGS (PERSON1 PERSON2)
+  (COND ((EQUAL (CDAR (GET-PARENTS PERSON1)) (CDAR (GET-PARENTS PERSON2))) T)
+        ((EQUAL (CDADR (GET-PARENTS PERSON1)) (CDADR (GET-PARENTS PERSON2))) T)
+        (T NIL)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Тест-кейсы:					;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(set-parents 'Peter 'Alice 'Dread)
+(set-parents 'Dennis 'Pall 'Jane)
+(set-parents 'Colin 'Merry 'Dread)
+(set-parents 'Genry 'Alice 'Dread)
+(set-parents 'Susie 'Alice 'Mat)
 
+(are-siblings `peter `genry) ;both mother and father match		T
+(are-siblings `peter `susie) ;only mother						T
+(are-siblings `genry `colin) ;only father						T
+(are-siblings `Dennis `genry);no match							NIL
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;№47. Определите функцию УДАЛИТЬ-ВСЕ-СВОЙСТВА, которая удаляет все свойства	;
 ;;;символа.									;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(DEFUN REMOVE-ALL-PROPERTIES (SYMBOL)
+  (COND ((NULL (SYMBOL-PLIST SYMBOL)) T)
+        (T (REMPROP SYMBOL (CAR (SYMBOL-PLIST SYMBOL)))
+         (REMOVE-ALL-PROPERTIES SYMBOL))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Тест-кейсы:					;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setf (get 'annie 'age) 43)
+(setf (get 'annie 'job) 'accountant)
+(setf (get 'annie 'sex) 'female)
+(setf (get 'annie 'children) 3)
 
-
-
-
+(symbol-plist 'annie)						;(CHILDREN 3 SEX FEMALE JOB ACCOUNTANT AGE 43)
+(remove-all-properties 'annie)				;T
+(symbol-plist 'annie)						;NIL
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
