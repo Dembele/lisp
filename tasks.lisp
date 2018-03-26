@@ -190,10 +190,10 @@
 (set-parents 'Genry 'Alice 'Dread)
 (set-parents 'Susie 'Alice 'Mat)
 
-(are-siblings `peter `genry) ;both mother and father match		T
-(are-siblings `peter `susie) ;only mother						T
-(are-siblings `genry `colin) ;only father						T
-(are-siblings `Dennis `genry);no match							NIL
+(are-siblings `peter `genry) ;both mother and father match    :		T
+(are-siblings `peter `susie) ;only mother		      :		T
+(are-siblings `genry `colin) ;only father		      :		T
+(are-siblings `Dennis `genry);no match			      :		NIL
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;№47. Определите функцию УДАЛИТЬ-ВСЕ-СВОЙСТВА, которая удаляет все свойства	;
 ;;;символа.									;
@@ -210,7 +210,7 @@
 (setf (get 'annie 'sex) 'female)
 (setf (get 'annie 'children) 3)
 
-(symbol-plist 'annie)						;(CHILDREN 3 SEX FEMALE JOB ACCOUNTANT AGE 43)
-(remove-all-properties 'annie)				;T
-(symbol-plist 'annie)						;NIL
+(symbol-plist 'annie)					;(CHILDREN 3 SEX FEMALE JOB ACCOUNTANT AGE 43)
+(remove-all-properties 'annie)				;T (all properties removed)
+(symbol-plist 'annie)					;NIL
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
