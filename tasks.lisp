@@ -155,11 +155,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;№29. Определите функцию, вычисляющую глубину списка (самой глубокой ветви)	;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(DEFUN DEPTH (LIST)
+  (COND ((ATOM LIST) 0) ((NULL LIST) 0)
+        (T (MAX (+ 1 (DEPTH (CAR LIST))) (DEPTH (CDR LIST))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Тест-кейсы:					;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+(DEPTH `(3
+			(2
+				(1 NIL NIL)
+			NIL)
+				(5
+					(6 NIL NIL) ; this one (4)
+				(6 NIL
+					(7 NIL NIL))))) ; or this one (4)
+					
+(DEPTH `(1)) ; 1
+(DEPTH `()) ; 0
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;№46. Предположим, что отец и мать некоторого лица, хранятся как значения со-	;
 ;;;ответствующих свойств у символа, обозначающего это лицо. Напишите функ-	;
@@ -171,7 +183,7 @@
   (LIST (LIST `(MOTHER) (GET PERSON `MOTHER))
         (LIST `(FATHER) (GET PERSON `FATHER))))
 
-(DEFUN SET-PARENTS (PERSON MOTHER FATHER)
+(DEFUN SET-PARENTS (&KEY PERSON MOTHER FATHER)
   (SETF (GET PERSON `MOTHER) MOTHER)
   (SETF (GET PERSON `FATHER) FATHER)
   (GET-PARENTS PERSON))
@@ -184,11 +196,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;				Тест-кейсы:					;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(set-parents 'Peter 'Alice 'Dread)
-(set-parents 'Dennis 'Pall 'Jane)
-(set-parents 'Colin 'Merry 'Dread)
-(set-parents 'Genry 'Alice 'Dread)
-(set-parents 'Susie 'Alice 'Mat)
+(set-parents :person 'Peter :mother 'Alice :father 'Dread)
+(set-parents :person 'Dennis :mother 'Pall :father 'Jane)
+(set-parents :person 'Colin :mother 'Merry :father 'Dread)
+(set-parents :person 'Genry :mother 'Alice :father 'Dread)
+(set-parents :person 'Susie :mother 'Alice :father 'Mat)
 
 (are-siblings `peter `genry) ;both mother and father match    :		T
 (are-siblings `peter `susie) ;only mother		      :		T
